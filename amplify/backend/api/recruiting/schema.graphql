@@ -1,4 +1,4 @@
-type Note @model @auth(rules: [{allow: owner}, {allow: private}]) {
+type Note @model @auth(rules: [{allow: owner}, {allow: public}]) {
   id: ID!
   name: String!
   description: String
