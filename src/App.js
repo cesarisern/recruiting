@@ -16,6 +16,7 @@ import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
 } from "./graphql/mutations";
+import Amplify, { Auth } from 'aws-amplify';
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
@@ -37,6 +38,7 @@ const App = ({ signOut }) => {
       name: form.get("name"),
       description: form.get("description"),
       metadata: form.get("metadata"),
+      owner: await signedinUser(),
     };
     await API.graphql({
       query: createNoteMutation,
@@ -53,6 +55,17 @@ const App = ({ signOut }) => {
       query: deleteNoteMutation,
       variables: { input: { id } },
     });
+  }
+
+  async function signedinUser() {
+    try {
+      const userObject = await Auth.currentAuthenticatedUser();
+      const user = userObject.username;
+      console.log(user);
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
