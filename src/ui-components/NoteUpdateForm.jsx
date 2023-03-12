@@ -27,12 +27,14 @@ export default function NoteUpdateForm(props) {
     name: "",
     description: "",
     metadata: "",
+    userId: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
   const [metadata, setMetadata] = React.useState(initialValues.metadata);
+  const [userId, setUserId] = React.useState(initialValues.userId);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = noteRecord
@@ -41,6 +43,7 @@ export default function NoteUpdateForm(props) {
     setName(cleanValues.name);
     setDescription(cleanValues.description);
     setMetadata(cleanValues.metadata);
+    setUserId(cleanValues.userId);
     setErrors({});
   };
   const [noteRecord, setNoteRecord] = React.useState(note);
@@ -56,6 +59,7 @@ export default function NoteUpdateForm(props) {
     name: [{ type: "Required" }],
     description: [],
     metadata: [],
+    userId: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -86,6 +90,7 @@ export default function NoteUpdateForm(props) {
           name,
           description,
           metadata,
+          userId,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -144,6 +149,7 @@ export default function NoteUpdateForm(props) {
               name: value,
               description,
               metadata,
+              userId,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -170,6 +176,7 @@ export default function NoteUpdateForm(props) {
               name,
               description: value,
               metadata,
+              userId,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -196,6 +203,7 @@ export default function NoteUpdateForm(props) {
               name,
               description,
               metadata: value,
+              userId,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -209,6 +217,33 @@ export default function NoteUpdateForm(props) {
         errorMessage={errors.metadata?.errorMessage}
         hasError={errors.metadata?.hasError}
         {...getOverrideProps(overrides, "metadata")}
+      ></TextField>
+      <TextField
+        label="User id"
+        isRequired={false}
+        isReadOnly={false}
+        value={userId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              metadata,
+              userId: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.userId ?? value;
+          }
+          if (errors.userId?.hasError) {
+            runValidationTasks("userId", value);
+          }
+          setUserId(value);
+        }}
+        onBlur={() => runValidationTasks("userId", userId)}
+        errorMessage={errors.userId?.errorMessage}
+        hasError={errors.userId?.hasError}
+        {...getOverrideProps(overrides, "userId")}
       ></TextField>
       <Flex
         justifyContent="space-between"
