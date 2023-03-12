@@ -25,20 +25,24 @@ export default function NoteCreateForm(props) {
   const initialValues = {
     name: "",
     description: "",
+    metadata: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
+    setMetadata(initialValues.metadata);
     setErrors({});
   };
   const validations = {
     name: [{ type: "Required" }],
     description: [],
+    metadata: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -68,6 +72,7 @@ export default function NoteCreateForm(props) {
         let modelFields = {
           name,
           description,
+          metadata,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -124,6 +129,7 @@ export default function NoteCreateForm(props) {
             const modelFields = {
               name: value,
               description,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -149,6 +155,7 @@ export default function NoteCreateForm(props) {
             const modelFields = {
               name,
               description: value,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -162,6 +169,32 @@ export default function NoteCreateForm(props) {
         errorMessage={errors.description?.errorMessage}
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
+      ></TextField>
+      <TextField
+        label="Metadata"
+        isRequired={false}
+        isReadOnly={false}
+        value={metadata}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              metadata: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks("metadata", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks("metadata", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, "metadata")}
       ></TextField>
       <Flex
         justifyContent="space-between"
