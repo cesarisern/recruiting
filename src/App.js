@@ -36,6 +36,7 @@ const App = ({ signOut }) => {
     const data = {
       name: form.get("name"),
       description: form.get("description"),
+      metadata: form.get("metadata"),
     };
     await API.graphql({
       query: createNoteMutation,
@@ -75,6 +76,14 @@ const App = ({ signOut }) => {
             variation="quiet"
             required
           />
+          <TextField
+            name="metadata"
+            placeholder="Note metadata"
+            label="Note metadata"
+            labelHidden
+            variation="quiet"
+            required
+          />
           <Button type="submit" variation="primary">
             Create Note
           </Button>
@@ -93,6 +102,7 @@ const App = ({ signOut }) => {
               {note.name}
             </Text>
             <Text as="span">{note.description}</Text>
+            <Text as="span">{note.metadata}</Text>
             <Button variation="link" onClick={() => deleteNote(note)}>
               Delete note
             </Button>
