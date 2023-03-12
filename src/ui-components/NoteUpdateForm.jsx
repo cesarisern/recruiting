@@ -28,6 +28,7 @@ export default function NoteUpdateForm(props) {
     description: "",
     metadata: "",
     userId: "",
+    owner: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -35,6 +36,7 @@ export default function NoteUpdateForm(props) {
   );
   const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [userId, setUserId] = React.useState(initialValues.userId);
+  const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = noteRecord
@@ -44,6 +46,7 @@ export default function NoteUpdateForm(props) {
     setDescription(cleanValues.description);
     setMetadata(cleanValues.metadata);
     setUserId(cleanValues.userId);
+    setOwner(cleanValues.owner);
     setErrors({});
   };
   const [noteRecord, setNoteRecord] = React.useState(note);
@@ -60,6 +63,7 @@ export default function NoteUpdateForm(props) {
     description: [],
     metadata: [],
     userId: [],
+    owner: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -91,6 +95,7 @@ export default function NoteUpdateForm(props) {
           description,
           metadata,
           userId,
+          owner,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -150,6 +155,7 @@ export default function NoteUpdateForm(props) {
               description,
               metadata,
               userId,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -177,6 +183,7 @@ export default function NoteUpdateForm(props) {
               description: value,
               metadata,
               userId,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -204,6 +211,7 @@ export default function NoteUpdateForm(props) {
               description,
               metadata: value,
               userId,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -231,6 +239,7 @@ export default function NoteUpdateForm(props) {
               description,
               metadata,
               userId: value,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.userId ?? value;
@@ -244,6 +253,34 @@ export default function NoteUpdateForm(props) {
         errorMessage={errors.userId?.errorMessage}
         hasError={errors.userId?.hasError}
         {...getOverrideProps(overrides, "userId")}
+      ></TextField>
+      <TextField
+        label="Owner"
+        isRequired={true}
+        isReadOnly={false}
+        value={owner}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              metadata,
+              userId,
+              owner: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.owner ?? value;
+          }
+          if (errors.owner?.hasError) {
+            runValidationTasks("owner", value);
+          }
+          setOwner(value);
+        }}
+        onBlur={() => runValidationTasks("owner", owner)}
+        errorMessage={errors.owner?.errorMessage}
+        hasError={errors.owner?.hasError}
+        {...getOverrideProps(overrides, "owner")}
       ></TextField>
       <Flex
         justifyContent="space-between"
