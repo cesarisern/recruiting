@@ -26,7 +26,6 @@ export default function NoteCreateForm(props) {
     name: "",
     description: "",
     metadata: "",
-    userId: "",
     owner: "",
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -34,14 +33,12 @@ export default function NoteCreateForm(props) {
     initialValues.description
   );
   const [metadata, setMetadata] = React.useState(initialValues.metadata);
-  const [userId, setUserId] = React.useState(initialValues.userId);
   const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
     setMetadata(initialValues.metadata);
-    setUserId(initialValues.userId);
     setOwner(initialValues.owner);
     setErrors({});
   };
@@ -49,7 +46,6 @@ export default function NoteCreateForm(props) {
     name: [{ type: "Required" }],
     description: [],
     metadata: [],
-    userId: [],
     owner: [{ type: "Required" }],
   };
   const runValidationTasks = async (
@@ -81,7 +77,6 @@ export default function NoteCreateForm(props) {
           name,
           description,
           metadata,
-          userId,
           owner,
         };
         const validationResponses = await Promise.all(
@@ -140,7 +135,6 @@ export default function NoteCreateForm(props) {
               name: value,
               description,
               metadata,
-              userId,
               owner,
             };
             const result = onChange(modelFields);
@@ -168,7 +162,6 @@ export default function NoteCreateForm(props) {
               name,
               description: value,
               metadata,
-              userId,
               owner,
             };
             const result = onChange(modelFields);
@@ -196,7 +189,6 @@ export default function NoteCreateForm(props) {
               name,
               description,
               metadata: value,
-              userId,
               owner,
             };
             const result = onChange(modelFields);
@@ -213,34 +205,6 @@ export default function NoteCreateForm(props) {
         {...getOverrideProps(overrides, "metadata")}
       ></TextField>
       <TextField
-        label="User id"
-        isRequired={false}
-        isReadOnly={false}
-        value={userId}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              description,
-              metadata,
-              userId: value,
-              owner,
-            };
-            const result = onChange(modelFields);
-            value = result?.userId ?? value;
-          }
-          if (errors.userId?.hasError) {
-            runValidationTasks("userId", value);
-          }
-          setUserId(value);
-        }}
-        onBlur={() => runValidationTasks("userId", userId)}
-        errorMessage={errors.userId?.errorMessage}
-        hasError={errors.userId?.hasError}
-        {...getOverrideProps(overrides, "userId")}
-      ></TextField>
-      <TextField
         label="Owner"
         isRequired={true}
         isReadOnly={false}
@@ -252,7 +216,6 @@ export default function NoteCreateForm(props) {
               name,
               description,
               metadata,
-              userId,
               owner: value,
             };
             const result = onChange(modelFields);

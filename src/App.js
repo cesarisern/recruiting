@@ -26,6 +26,11 @@ const App = ({ signOut }) => {
   }, []);
 
   async function fetchNotes() {
+    const user = await Auth.currentAuthenticatedUser();
+    const UserID = user.attributes.sub;
+  
+    console.log('UserID:', UserID);
+
     const apiData = await API.graphql({ query: listNotes });
     const notesFromAPI = apiData.data.listNotes.items;
     setNotes(notesFromAPI);
@@ -60,8 +65,8 @@ const App = ({ signOut }) => {
   async function signedinUser() {
     try {
       const userObject = await Auth.currentAuthenticatedUser();
-      const user = userObject.username;
-      console.log(user);
+      const user = userObject.attributes.sub;
+      console.log("Signed in as: "+user);
       return user;
     } catch (error) {
       console.log(error);
