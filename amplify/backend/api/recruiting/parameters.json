@@ -2,7 +2,7 @@
   "AppSyncApiName": "recruiting",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-03-14T18:26:38.309Z",
+  "AuthModeLastUpdated": "2023-03-14T22:28:37.041Z",
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
       "authrecruiting72820e87",
