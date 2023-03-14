@@ -34,6 +34,7 @@ const App = ({ signOut }) => {
     const apiData = await API.graphql({ query: listNotes });
     const notesFromAPI = apiData.data.listNotes.items;
     setNotes(notesFromAPI);
+    console.log('Notes:', notesFromAPI);
   }
 
   async function createNote(event) {
@@ -116,11 +117,10 @@ const App = ({ signOut }) => {
             justifyContent="center"
             alignItems="center"
           >
-            <Text as="strong" fontWeight={700}>
-              {note.name}
-            </Text>
-            <Text as="span">{note.description}</Text>
-            <Text as="span">{note.metadata}</Text>
+            <Text as="strong" fontWeight={700}>Name: {note.name}</Text>
+            <Text as="span"> Description: {note.description}</Text>
+            <Text as="span">Meta: {note.metadata}</Text>
+            <Text as="span">Owner: {note.owner}</Text>
             <Button variation="link" onClick={() => deleteNote(note)}>
               Delete note
             </Button>

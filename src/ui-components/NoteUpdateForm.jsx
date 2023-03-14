@@ -59,7 +59,7 @@ export default function NoteUpdateForm(props) {
     name: [{ type: "Required" }],
     description: [],
     metadata: [],
-    owner: [{ type: "Required" }],
+    owner: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -220,7 +220,7 @@ export default function NoteUpdateForm(props) {
       ></TextField>
       <TextField
         label="Owner"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={owner}
         onChange={(e) => {

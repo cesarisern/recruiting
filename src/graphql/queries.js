@@ -25,6 +25,7 @@ export const listNotes = /* GraphQL */ `
         name
         description
         metadata
+        owner
         createdAt
         updatedAt
       }
